@@ -38,7 +38,7 @@ gulp.task('html', function(){
 
 gulp.task('css', function(){
     return gulp.src('src/css/*.scss')
-    .pipe(sass())
+    .pipe(sass({outputStyle: "expanded"})) //nested(default), expanded, compact, compressed
     .pipe(gulpif(env === 'dist', cleanCss()))
     .pipe(rename({ suffix: '.min' }))
     .pipe(gulp.dest(env + '/css')) 
