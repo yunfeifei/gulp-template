@@ -3,6 +3,7 @@ var rename = require('gulp-rename');
 var uglify = require('gulp-uglify');
 var watch = require('gulp-watch');
 var less = require('gulp-less');
+var sass = require('gulp-sass');
 var cleanCss = require("gulp-clean-css");
 var minifyHtml = require("gulp-minify-html");
 var jshint = require("gulp-jshint");
@@ -10,20 +11,22 @@ var imagemin = require('gulp-imagemin');
 var connect = require('gulp-connect');
 var gulpif = require('gulp-if');
 
-gulp.task('watchs', function(){
+gulp.task('watchs', function(done){
     gulp.watch('src/*.html', gulp.series('html'));
     gulp.watch('src/images/*', gulp.series('image'));
     gulp.watch('src/css/*.css', gulp.series('css'));
     gulp.watch('src/js/*.js', gulp.series('js'));
+    done();
 });
 
-gulp.task('connect', function(){
+gulp.task('connect', function(done){
     connect.server({
         root: 'dev', 
         ip: 'localhost', 
         port: 8080,
         livereload: true
     });
+    done();
 });
 
 gulp.task('html', function(){
@@ -34,8 +37,8 @@ gulp.task('html', function(){
 });
 
 gulp.task('css', function(){
-    return gulp.src('src/css/*.css')
-    //.pipe(less())
+    return gulp.src('src/css/*.scss')
+    .pipe(sass())
     .pipe(gulpif(env === 'dist', cleanCss()))
     .pipe(rename({ suffix: '.min' }))
     .pipe(gulp.dest(env + '/css')) 
